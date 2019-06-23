@@ -20,8 +20,10 @@ import UserQRCode from './UserQRCode';
 import AdviceAndFeedback from './AdviceAndFeedback';
 import checkVersion from "./../conf/AutoUpdateRNBundle";
 import ServiceState from "./ServiceState";
-import NotificationSetting from './NotificationSetting'
-import PrivacySetting from './PrivacySetting'
+import NotificationSetting from './NotificationSetting';
+import NameSetting from './NameSetting';
+import TelSetting from './TelSetting';
+import PrivacySetting from './PrivacySetting';
 
 export default class App extends Component {
     constructor(props) {
@@ -70,6 +72,14 @@ export default class App extends Component {
             //通知设置
             'NotificationSetting':{
               screen:NotificationSetting
+            },
+            //姓名设置
+            'NameSetting':{
+                screen:NameSetting
+            },
+            //手机设置
+            'TelSetting':{
+                screen:TelSetting
             },
             'PrivacySetting':{
                 screen:PrivacySetting

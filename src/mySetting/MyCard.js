@@ -49,8 +49,8 @@ export default class UserCard extends Component {
     }
 
     componentDidMount() {
-        NativeModules.QimRNBModule.getMyInfo(function (responce) {
-            let userInfo = responce.MyInfo;
+        NativeModules.QbcImRNBModule.getVCardInfo(function (responce) {
+            let userInfo = responce.UserInfo;
             this.setState({userInfo: userInfo});
         }.bind(this));
         NativeModules.QimRNBModule.getMyMood(function(responce){
@@ -61,6 +61,14 @@ export default class UserCard extends Component {
         //个性签名更新通知
         this.updatePSignature = DeviceEventEmitter.addListener('updatePersonalSignature', function (params) {
             this.updatePersonalSignature(params);
+        }.bind(this));
+
+        this.updateNameAttribute = DeviceEventEmitter.addListener('updateName', function (params) {
+            this.updateName(params);
+        }.bind(this));
+
+        this.updateTelAttribute = DeviceEventEmitter.addListener('updateTel', function (params) {
+            this.updateTel(params);
         }.bind(this));
 
         this.imageUpdateStartAttribute = DeviceEventEmitter.addListener('imageUpdateStart', function (params) {
@@ -94,6 +102,8 @@ export default class UserCard extends Component {
     componentWillUnmount() {
         this.unMount = true;
         this.updatePSignature.remove();
+        this.updateNameAttribute.remove();
+        this.updateTelAttribute.remove();
         this.imageUpdateStartAttribute.remove();
         this.imageUpdateEndAttribute.remove();
     }
@@ -103,9 +113,30 @@ export default class UserCard extends Component {
         let pSignature = params["PersonalSignature"];
         if (userId == this.state.userInfo["UserId"]) {
             // this.state.userMood =pSignature;
-            // let userInfo = this.state.userInfo;
-            // userInfo["Mood"] = pSignature;
-            this.setState({userMood: pSignature});
+            let userInfo = this.state.userInfo;
+            userInfo["Mood"] = pSignature;
+            this.setState({"userInfo": userInfo});
+        }
+    }
+
+    updateName(params) {
+        let userId = params["UserId"];
+        let name = params["Name"];
+        if (userId == this.state.userInfo["UserId"]) {
+            // this.state.userMood =pSignature;
+            let userInfo = this.state.userInfo;
+            userInfo["Name"] = name;
+            this.setState({"userInfo": userInfo});
+        }
+    }
+
+    updateTel(params) {
+        let userId = params["UserId"];
+        let tel = params["Tel"];
+        if (userId == this.state.userInfo["UserId"]) {
+            let userInfo = this.state.userInfo;
+            userInfo["Tel"] = tel;
+            this.setState({"userInfo": userInfo});
         }
     }
 
@@ -227,6 +258,29 @@ export default class UserCard extends Component {
         });
     };
 
+    openNameSetting() {
+        if (this.state.userInfo["UserId"] === '' || this.state.userInfo["UserId"] === null) {
+            return;
+        }
+        this.props.navigation.navigate('NameSetting', {
+            'userId': this.state.userInfo["UserId"],
+            "name": this.state.userInfo["Name"],
+            'remark': this.state.userInfo["Remarks"]
+        });
+    }
+
+    openTelSetting() {
+        if (this.state.userInfo["UserId"] === '' || this.state.userInfo["UserId"] === null) {
+            return;
+        }
+        this.props.navigation.navigate('TelSetting', {
+            'userId': this.state.userInfo["UserId"],
+            "name": this.state.userInfo["Name"],
+            "tel": this.state.userInfo["Tel"],
+            'remark': this.state.userInfo["Remarks"]
+        });
+    }
+
     _showPersonalSignature(mood){
         if(AppConfig.isQtalk()){
             return(
@@ -246,6 +300,7 @@ export default class UserCard extends Component {
 
     render() {
         let nickName = "";
+        let tel = "";
         let mood = "这家伙很懒什么都没留"; //'/Users/admin/Documents/big_image.gif'
         let headerUri = "../images/singleHeaderDefault.png";
         let userId = "";
@@ -253,13 +308,15 @@ export default class UserCard extends Component {
         if (this.state.userInfo) {
             userId = this.state.userInfo["UserId"];
             nickName = this.state.userInfo["Name"];
+            tel = this.state.userInfo["Tel"];
             headerUri = this.state.userInfo["HeaderUri"];
-            // mood = this.state.userInfo["Mood"];
+            mood = this.state.userInfo["Mood"];
             department = this.state.userInfo["Department"];
         }
-        if (this.state.userMood) {
+        //TODO add by hqlin 这个功能还未实现
+        /*if (this.state.userMood) {
             mood = this.state.userMood;
-        }
+        }*/
         return (
             <View style={styles.wrapper}>
                 <CustomActionSheet ref={o => this.CustomActionSheet = o}/>
@@ -274,18 +331,34 @@ export default class UserCard extends Component {
                         <Image source={require('../images/arrow_right.png')} style={styles.rightArrow}/>
                     </TouchableOpacity>
                     <View>
-                        <View style={styles.cellContentView}>
+                        {/*<View style={styles.cellContentView}>
                             <Text style={styles.cellTitle}>名字</Text>
                             <Text style={styles.cellValue}>{nickName}</Text>
-                        </View>
-                        <View style={styles.cellContentView}>
+                        </View>*/}
+                        <TouchableOpacity onPress={this.openNameSetting.bind(this)}>
+                            <View style={styles.cellContentView}>
+                                <Text style={styles.cellTitle}>名字</Text>
+                                <Text
+                                    style={styles.cellValue}>{nickName}</Text>
+                                <Image source={require('../images/arrow_right.png')} style={styles.rightArrow}/>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.openTelSetting.bind(this)}>
+                            <View style={styles.cellContentView}>
+                                <Text style={styles.cellTitle}>手机</Text>
+                                <Text
+                                    style={styles.cellValue}>{tel}</Text>
+                                <Image source={require('../images/arrow_right.png')} style={styles.rightArrow}/>
+                            </View>
+                        </TouchableOpacity>
+                        {/*<View style={styles.cellContentView}>
                             <Text style={styles.cellTitle}>用户ID</Text>
                             <Text style={styles.cellValue}>{userId}</Text>
-                        </View>
-                        <View style={styles.cellContentView}>
+                        </View>*/}
+                        {/*<View style={styles.cellContentView}>
                             <Text style={styles.cellTitle}>部门</Text>
                             <Text style={styles.cellValue}>{department}</Text>
-                        </View>
+                        </View>*/}
                         <TouchableOpacity style={styles.cellContentView} onPress={() => {
                             this.openUserQRCode();
                         }}>

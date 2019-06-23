@@ -50,6 +50,9 @@ export default class UserCard extends Component {
         this.updatePSignature = DeviceEventEmitter.addListener('updatePersonalSignature', function (params) {
             this.updatePersonalSignature(params);
         }.bind(this));
+        this.updateNameAttribute = DeviceEventEmitter.addListener('updateName', function (params) {
+            this.updateName(params);
+        }.bind(this));
     }
 
     init(){
@@ -69,6 +72,7 @@ export default class UserCard extends Component {
         this.willShow.remove();
         this.imageUpdateEndAttribute.remove();
         this.updatePSignature.remove();
+        this.updateNameAttribute.remove();
     }
 
 
@@ -77,11 +81,26 @@ export default class UserCard extends Component {
         let pSignature = params["PersonalSignature"];
         if (userId == this.state.userInfo["UserId"]) {
             // this.state.userMood =pSignature;
-            // let userInfo = this.state.userInfo;
-            // userInfo["Mood"] = pSignature;
-            this.setState({userMood: pSignature});
+            let userInfo = this.state.userInfo;
+            userInfo["Mood"] = pSignature;
+            this.setState({"userInfo": userInfo});
         }
     }
+
+    updateName(params) {
+        let userId = params["UserId"];
+        let name = params["Name"];
+        if (userId == this.state.userInfo["UserId"]) {
+            // this.state.userMood =pSignature;
+            // let userInfo = this.state.userInfo;
+            // userInfo["Mood"] = pSignature;
+            //this.setState({Name: name});
+            let userInfo = this.state.userInfo;
+            userInfo["Name"] = name;
+            this.setState({"userInfo": userInfo});
+        }
+    }
+
     //结束显示
     imageUpdateEnd(params) {
         if (params.ok) {
@@ -220,11 +239,11 @@ export default class UserCard extends Component {
         if (this.state.userInfo) {
             nickName = this.state.userInfo["Name"];
             headerUri = this.state.userInfo["HeaderUri"];
-            // mood = this.state.userInfo["Mood"];
+            mood = this.state.userInfo["Mood"];
         }
-        if(this.state.userMood){
+        /*if(this.state.userMood){
             mood = this.state.userMood
-        }
+        }*/
         let containerStyle = {flex: 1};
         if (Platform.OS == 'android') {
             containerStyle = {height: (height - 105 - StatusBar.currentHeight)};
@@ -246,7 +265,7 @@ export default class UserCard extends Component {
                         <Image source={require('../images/arrow_right.png')} style={styles.rightArrow}/>
                     </TouchableOpacity>
                     <View style={styles.line}/>
-                    <View style={styles.walletInfo}>
+                    {/*<View style={styles.walletInfo}>
                         <TouchableOpacity style={styles.cellContentView} onPress={() => {
                             this.openMyRedBag();
                         }}>
@@ -263,22 +282,22 @@ export default class UserCard extends Component {
                             <Text style={styles.cellValue}></Text>
                             <Image source={require('../images/arrow_right.png')} style={styles.rightArrow}/>
                         </TouchableOpacity>
-                    </View>
+                    </View>*/}
                     <View style={styles.line}>
 
                     </View>
 
                     {/*{this._showAccountInfo()}*/}
-                    {this._renderFileCell()}
+                    {/*{this._renderFileCell()}*/}
                     <View>
-                        <TouchableOpacity style={styles.cellContentView} onPress={() => {
+                        {/*<TouchableOpacity style={styles.cellContentView} onPress={() => {
                             this.openAdviceAndFeedback();
                         }}>
                             <Text style={styles.cellIcon}>{String.fromCharCode(0xf0ef)}</Text>
                             <Text style={styles.cellTitle}>建议反馈</Text>
                             <Text style={styles.cellValue}></Text>
                             <Image source={require('../images/arrow_right.png')} style={styles.rightArrow}/>
-                        </TouchableOpacity>
+                        </TouchableOpacity>*/}
                         <TouchableOpacity style={styles.cellContentView} onPress={() => {
                             this.openSetting();
                         }}>

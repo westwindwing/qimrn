@@ -95,11 +95,19 @@ export default class UserCard extends Component {
     }
 
     updateNick(params) {
-        let info = params.UserInfo;
-        this.setState({userInfo:info});
+        //let info = params.UserInfo;
+        //this.setState({userInfo:info});
         // this.props.navigation.setParams({
         //     title: info["Name"],
         // });
+
+        let userId = params.UserId;
+        let name = params.Name;
+        let userInfo = this.state.userInfo;
+        if (userInfo["UserId"] == userId) {
+            userInfo["Name"] = name;
+            this.setState({userInfo: userInfo});
+        }
     }
 
     updateMedal(params) {
@@ -458,19 +466,23 @@ export default class UserCard extends Component {
 
     _showDepartment(userId,department) {
         if (AppConfig.isQtalk()) {
+            let userId = this.state.userInfo ? this.state.userInfo["UserId"] : userId;
+            if(userId){
+                userId = userId.substring(0,userId.indexOf("@",0));
+            }
             return (
                 <View>
                     <View style={styles.baseInfo}>
                         <View style={styles.cellContentView}>
                             <Text style={styles.cellTitle}>用户ID</Text>
                             <Text
-                                style={styles.cellValue}>{this.state.userInfo ? this.state.userInfo["UserId"] : userId}</Text>
+                                style={styles.cellValue}>{userId}</Text>
                         </View>
-                        <View style={styles.cellContentView}>
+                        {/*<View style={styles.cellContentView}>
                             <Text style={styles.cellTitle}>部门</Text>
                             <Text
                                 style={styles.cellValue}>{this.state.userInfo ? this.state.userInfo["Department"] : department}</Text>
-                        </View>
+                        </View>*/}
                     </View>
 
                     <View style={styles.line}>
@@ -500,10 +512,12 @@ export default class UserCard extends Component {
             userId = this.state.userInfo["UserId"];
             department = this.state.userInfo["Department"];
 
+            mood = this.state.userInfo["Mood"];
+
         }
-        if (this.state.userMood) {
+        /*if (this.state.userMood) {
             mood = this.state.userMood["Mood"];
-        }
+        }*/
 
         let isFriendBOOL = this.state.isFriend;
         // console.log("isFriendBOOL = " + this.state.isFriend);
@@ -542,9 +556,9 @@ export default class UserCard extends Component {
 
                     {this._showDepartment(userId, department)}
                     {this._showLeader()}
-                    <View style={styles.line}>
-                    </View>
-                    {this._showCommentAndEmail()}
+                    {/*<View style={styles.line}>
+                    </View>*/}
+                    {/*{this._showCommentAndEmail()}*/}
 
                 </ScrollView>
                 <View style={styles.tabBar}>
@@ -727,7 +741,7 @@ var styles = StyleSheet.create({
         height: 50
     },
     baseInfo: {
-        height: 100
+        height: 50
     },
     userDepartment: {},
     workInfo: {

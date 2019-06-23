@@ -501,28 +501,29 @@ export default class Setting extends Component {
                     </View>
 
 
-                    <Text style={styles.sectionHeader}>
+                   {/* <Text style={styles.sectionHeader}>
                         对话
                     </Text>
-
+*/}
 
                     {this._renderModSetting()}
 
 
                     <View>
-                        <TouchableOpacity style={styles.cellContentView} onPress={() => {
+                        {/*<TouchableOpacity style={styles.cellContentView} onPress={() => {
                             this.openSearchHistoryVc();
                         }}>
                             <Text style={[styles.cellTitle, {color: "#03A9F4"}]}>历史消息查询</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity>*/}
                         {this._showClearButton()}
                     </View>
 
-                    <View style={styles.line}>
-                    </View>
+                    <Text style={styles.sectionHeader}>
+                        账号管理
+                    </Text>
                     <View>
 
-                        {this._showAccountManager()}
+                        {/*{this._showAccountManager()}*/}
                         {this._showAccountSwitch()}
                         {this._showCheckConfig()}
                         {this._showServiceState()}

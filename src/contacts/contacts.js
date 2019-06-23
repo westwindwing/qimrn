@@ -169,6 +169,8 @@ class ContactItem extends Component {
                     txt = this.state.info.item.Name;
                 } else {
                     txt = this.state.info.item.XmppId;
+                    //add by hqlin 截取@前面的字符串
+                    txt = txt.substring(0,txt.indexOf("@",0));
                 }
             }
             return (
@@ -381,7 +383,7 @@ export default class Contacts extends Component {
                         {title: "星标联系人", iconFont: true, icon: "f038", backgroundColor: "#34475e"},
                         // {title: "好友", iconFont: true, icon: "f0eb", backgroundColor: "#5D73E5"},
                         {title: "群组", iconFont: true, icon: "f3e3", backgroundColor: "#06B524"},
-                        {title: "公众号", iconFont: true, icon: "f130", backgroundColor: "#007AFF"},
+                        //{title: "公众号", iconFont: true, icon: "f130", backgroundColor: "#007AFF"},
                         {title: "组织架构", iconFont: true, icon: "f11d", backgroundColor: "#40ff15"}
                     ];
                 } else {
@@ -390,7 +392,7 @@ export default class Contacts extends Component {
                         {title: "星标联系人", iconFont: true, icon: "f038", backgroundColor: "#34475e"},
                         // {title: "好友", iconFont: true, icon: "f0eb", backgroundColor: "#5D73E5"},
                         {title: "群组", iconFont: true, icon: "f3e3", backgroundColor: "#06B524"},
-                        {title: "公众号", iconFont: true, icon: "f130", backgroundColor: "#007AFF"},
+                        //{title: "公众号", iconFont: true, icon: "f130", backgroundColor: "#007AFF"},
                         // {title: "组织架构", iconFont: true, icon: "f11d", backgroundColor: "#40ff15"}
                     ];
                 }
@@ -550,7 +552,7 @@ export default class Contacts extends Component {
                     ItemSeparatorComponent={() => <View style={styles.itemSeparatorLine}></View>}
                     keyExtractor={this._keyExtractor}
                     // 不能加ItemLayout 加了 Items Changed 不好使
-                    ListHeaderComponent={this._renderHeader.bind(this)}
+                    //ListHeaderComponent={this._renderHeader.bind(this)}
                     ListFooterComponent={this._renderFooter.bind(this)}
                     onViewableItemsChanged={this._onViewableItemsChanged.bind(this)}
                     getItemLayout={this._getItemLayout.bind(this)}
